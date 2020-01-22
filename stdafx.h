@@ -17,7 +17,7 @@
 
 using namespace std;
 
-#define DesignResolution Vector2(1200, 720)
+#define DesignResolution Vector2(600,600)
 #define WINSTYLE WS_VISIBLE || WS_BORDER || WS_CAPTION
 
 //==========================================

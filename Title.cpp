@@ -1,9 +1,9 @@
 #include "stdafx.h"
 #include "Title.h"
-#include "GameScene.h"
+#include "TestScene.h"
 
 void Title::Init()
 {
-	ApplicationManager::GetInstance()->SetResolution(1200, 700, false);
-	SceneManager::GetInstance()->PushScene(new GameScene);
+	ApplicationManager::GetInstance()->SetResolution(600, 600, false);
+	SceneManager::GetInstance()->PushScene(new TestScene);
 }

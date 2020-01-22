@@ -3,57 +3,72 @@
 
 void Character::Init()
 {
-	_physics = object->GetComponent<Physics>();
-	_transform = object->GetTransform();
-	_sound = object->GetComponent<Sound>();
+	tileMap = map->GetComponent<TileMap>();
+	vTotal = tileMap->GetVTotal();
+
+	tileMap->SetTile(Vector2(index.x, index.y), ATTRIBUTE::PLAYER);
+
 }
 
 void Character::Update()
 {
-	if (InputManager::GetInstance()->GetKeyDown(VK_ESCAPE))
-		exit(0);
-
-	keyControl();
+	KeyControl();
 }
 
-void Character::OnCollisionEnter(Object* obj)
+void Character::KeyControl()
 {
-	int i = 0;
-	if (obj->GetTag() == "Mouse")
+	
+	if (InputManager::GetInstance()->GetKeyDown(VK_UP))
 	{
-		_transform->SetScale(Vector2(2, 2));
+		//抗寇 贸府 
+		if (index.y == 0)
+			return;
+		if (vTotal[index.x * TILENUM_Y + index.y - 1]->GetComponent<Tile>()->GetAttribute() == ATTRIBUTE::WALL)
+			return;
+
+		tileMap->SetTile(Vector2(index.x, index.y - 1), ATTRIBUTE::PLAYER);
+		tileMap->SetTile(Vector2(index.x, index.y), ATTRIBUTE::NONE);
+
+		index = Vector2(index.x, index.y - 1);
+	}
+	if (InputManager::GetInstance()->GetKeyDown(VK_DOWN))
+	{
+		//抗寇 贸府 
+		if (index.y == TILENUM_Y-1)
+			return;
+		if (vTotal[index.x * TILENUM_Y + index.y + 1]->GetComponent<Tile>()->GetAttribute() == ATTRIBUTE::WALL)
+			return;
+
+		tileMap->SetTile(Vector2(index.x, index.y + 1), ATTRIBUTE::PLAYER);
+		tileMap->SetTile(Vector2(index.x, index.y), ATTRIBUTE::NONE);
+
+		index = Vector2(index.x, index.y + 1);
+	}
+	if (InputManager::GetInstance()->GetKeyDown(VK_RIGHT))
+	{
+		//抗寇 贸府 
+		if (index.x == TILENUM_X - 1)
+			return;
+		if (vTotal[(index.x+1) * TILENUM_Y + index.y]->GetComponent<Tile>()->GetAttribute() == ATTRIBUTE::WALL)
+			return;
+
+		tileMap->SetTile(Vector2(index.x+1, index.y), ATTRIBUTE::PLAYER);
+		tileMap->SetTile(Vector2(index.x, index.y), ATTRIBUTE::NONE);
+
+		index = Vector2(index.x+1, index.y);
+	}
+	if (InputManager::GetInstance()->GetKeyDown(VK_LEFT))
+	{
+		//抗寇 贸府 
+		if (index.x == 0)
+			return;
+		if (vTotal[(index.x - 1) * TILENUM_Y + index.y]->GetComponent<Tile>()->GetAttribute() == ATTRIBUTE::WALL)
+			return;
+
+		tileMap->SetTile(Vector2(index.x - 1, index.y), ATTRIBUTE::PLAYER);
+		tileMap->SetTile(Vector2(index.x, index.y), ATTRIBUTE::NONE);
+
+		index = Vector2(index.x - 1, index.y);
 	}
 }
 
-void Character::OnCollisionExit(Object* obj)
-{
-	if (obj->GetTag() == "Mouse")
-	{
-		_transform->SetScale(Vector2(4, 4));
-	}
-}
-
-void Character::OnCollisionStay(Object* obj)
-{
-	if (obj->GetTag() == "Mouse")
-	{
-		_transform->SetScale(Vector2(2, 2));
-	}
-}
-void Character::keyControl()
-{
-	if (InputManager::GetInstance()->GetKey(VK_RIGHT))
-	{
-		_transform->Translate(Vector2(5, 0));
-	}
-	if (InputManager::GetInstance()->GetKey(VK_LEFT))
-	{
-		_transform->Translate(Vector2(-5, 0));
-	}
-	if (InputManager::GetInstance()->GetKey(VK_SPACE) && _jumpCount == 0)
-	{
-		_physics->AddForce(Vector2(0, -200));
-		_jumpCount++;
-		_sound->Play();
-	}
-}
