@@ -1,0 +1,39 @@
+#include "stdafx.h"
+#include "GgaetIp.h"
+
+void PhysicsComponent::Init()
+{
+	collider = object->GetComponent<ColliderComponent>();
+	transform = object->GetTransform();
+}
+
+void PhysicsComponent::Update()
+{
+	if (isGravity)
+		velocty += Vector2(0, gravity) / FrameRate;
+
+	if (collider == nullptr)
+	{
+		transform->SetPosition(transform->GetPosition() + velocty);
+		return;
+	}
+	Vector2 position;
+	if (isStop_X)
+		position.SetX(position.GetX(););
+	transform->SetPosition(transform->GetPosition() + velocty);
+}
+
+void PhysicsComponent::AddForce(Vector2 force)
+{
+	velocty += force;
+}
+
+void PhysicsComponent::SetVelocty(Vector2 velocty)
+{
+	this->velocty = velocty;
+}
+
+Vector2 PhysicsComponent::GetVelocty()
+{
+	return velocty;
+}
